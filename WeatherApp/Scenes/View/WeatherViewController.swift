@@ -8,8 +8,6 @@
 
 import UIKit
 
-private let reuseIdentifier = "WeatherCollectionCell"
-
 final class WeatherViewController: UICollectionViewController {
     private let viewModel: WeatherViewModelType
     init(with viewModel: WeatherViewModelType) {
@@ -30,7 +28,7 @@ final class WeatherViewController: UICollectionViewController {
         view.backgroundColor = .white
         collectionView.allowsMultipleSelection = false
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.backgroundColor = UIColor.lightGray
+        collectionView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
         setupCollection()
 
         viewModel.reloadData.subscribe { [weak self] reload in
@@ -61,7 +59,8 @@ private extension WeatherViewController {
 extension WeatherViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = collectionView.bounds.width
-        return CGSize(width: width - 24, height: collectionView.bounds.height - 24)
+        let padding = CGFloat(20)
+        return CGSize(width: width - padding, height: collectionView.bounds.height - padding)
     }
 }
 
@@ -72,7 +71,7 @@ extension WeatherViewController {
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WeatherCollectionCell.identifier, for: indexPath) as! WeatherCollectionCell
-
+        cell.setData(model: dataList[indexPath.row])
         return cell
     }
 

@@ -8,25 +8,32 @@
 
 import Foundation
 protocol WeatherViewModelType {
+    var loadOffline: Bool { get }
     var reloadData: Observable<Bool> { get }
     func loadData()
-    // output
     var dataList: [ForecastList] { get }
 }
 
 final class WeatherViewModel: WeatherViewModelType {
-    var reloadData: Observable<Bool> = .init(false)
-    
-
     private let forcastLoader: WeatherDataSource
+    private let days: Int = 5
+    let reloadData: Observable<Bool> = .init(false)
     private(set) var dataList: [ForecastList] = []
 
     init(loader: WeatherDataSource = WeatherLoader()) {
         forcastLoader = loader
     }
 
+    var loadOffline: Bool = false {
+        didSet {
+            guard let loader = forcastLoader as? WeatherLoader else { return }
+            loader.offlineIsRequested = loadOffline
+            loadData()
+        }
+    }
+
     func loadData() {
-        forcastLoader.loadTodayForecast(compeletion: { [weak self] data in
+        forcastLoader.loadTodayForecast(days: days, compeletion: { [weak self] data in
             guard let self = self else { return }
             switch data {
             case let .success(response):

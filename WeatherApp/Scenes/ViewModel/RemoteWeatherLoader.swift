@@ -14,8 +14,8 @@ final class RemoteWeatherLoader: WeatherDataSource {
         self.apiClient = apiClient
     }
 
-    func loadTodayForecast(compeletion: @escaping (Result<WeatherResponse, Error>) -> Void) {
-        let api = WeatherAPI.weatherToday(city: "München,DE", offset: 0)
+    func loadTodayForecast(days:Int,compeletion: @escaping (Result<WeatherResponse, NetworkError>) -> Void) {
+        let api = WeatherAPI.weatherToday(city: "München", offset: 0, days: days)
         apiClient.getData(of: api) { [weak self] result in
             switch result {
             case let .success(data):

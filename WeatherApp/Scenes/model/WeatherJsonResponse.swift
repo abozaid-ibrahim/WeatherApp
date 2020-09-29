@@ -86,18 +86,14 @@ struct Rain: Codable {
 
 // MARK: - Sys
 struct Sys: Codable {
-    let pod: Pod?
+    let pod: String?
 }
 
-enum Pod: String, Codable {
-    case d = "d"
-    case n = "n"
-}
 
 // MARK: - Weather
 struct Weather: Codable {
     let id: Int?
-    let main: MainEnum?
+    let main: String?
     let weatherDescription, icon: String?
 
     enum CodingKeys: String, CodingKey {
@@ -107,11 +103,8 @@ struct Weather: Codable {
     }
 }
 
-enum MainEnum: String, Codable {
-    case clear = "Clear"
-    case clouds = "Clouds"
-    case rain = "Rain"
-}
+
+
 
 // MARK: - Wind
 struct Wind: Codable {
