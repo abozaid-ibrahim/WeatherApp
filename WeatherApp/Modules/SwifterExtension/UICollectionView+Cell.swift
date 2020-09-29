@@ -1,8 +1,8 @@
 //
 //  UICollectionView+Cell.swift
-//  Marvel
+//  WeatherApp
 //
-//  Created by abuzeid on 22.09.20.
+//  Created by abuzeid on 29.09.20.
 //  Copyright © 2020 abuzeid. All rights reserved.
 //
 
