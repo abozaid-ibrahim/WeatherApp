@@ -17,6 +17,10 @@
 		6C31F65E252386D1005872DA /* WeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C31F65D252386D1005872DA /* WeatherViewController.swift */; };
 		6C31F6642523874F005872DA /* Navigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C31F6632523874F005872DA /* Navigator.swift */; };
 		6C31F6662523877E005872DA /* Destination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C31F6652523877E005872DA /* Destination.swift */; };
+		6C31F66A252388F0005872DA /* WeatherCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C31F668252388F0005872DA /* WeatherCollectionCell.swift */; };
+		6C31F66B252388F0005872DA /* WeatherCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6C31F669252388F0005872DA /* WeatherCollectionCell.xib */; };
+		6C31F66D25238B4E005872DA /* ActivityIndicatorFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C31F66C25238B4E005872DA /* ActivityIndicatorFooter.swift */; };
+		6C31F67225238BE8005872DA /* UICollectionView+Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C31F67125238BE8005872DA /* UICollectionView+Cell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +57,10 @@
 		6C31F65D252386D1005872DA /* WeatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewController.swift; sourceTree = "<group>"; };
 		6C31F6632523874F005872DA /* Navigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Navigator.swift; sourceTree = "<group>"; };
 		6C31F6652523877E005872DA /* Destination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Destination.swift; sourceTree = "<group>"; };
+		6C31F668252388F0005872DA /* WeatherCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherCollectionCell.swift; sourceTree = "<group>"; };
+		6C31F669252388F0005872DA /* WeatherCollectionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WeatherCollectionCell.xib; sourceTree = "<group>"; };
+		6C31F66C25238B4E005872DA /* ActivityIndicatorFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorFooter.swift; sourceTree = "<group>"; };
+		6C31F67125238BE8005872DA /* UICollectionView+Cell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Cell.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +150,9 @@
 			isa = PBXGroup;
 			children = (
 				6C31F65D252386D1005872DA /* WeatherViewController.swift */,
+				6C31F668252388F0005872DA /* WeatherCollectionCell.swift */,
+				6C31F669252388F0005872DA /* WeatherCollectionCell.xib */,
+				6C31F66C25238B4E005872DA /* ActivityIndicatorFooter.swift */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -149,6 +160,7 @@
 		6C31F660252386E2005872DA /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				6C31F66E25238B6F005872DA /* SwifterExtension */,
 				6C31F661252386F5005872DA /* Navigation */,
 			);
 			path = Modules;
@@ -172,6 +184,14 @@
 				6C31F6382523855D005872DA /* LaunchScreen.storyboard */,
 			);
 			path = SupportingFiles;
+			sourceTree = "<group>";
+		};
+		6C31F66E25238B6F005872DA /* SwifterExtension */ = {
+			isa = PBXGroup;
+			children = (
+				6C31F67125238BE8005872DA /* UICollectionView+Cell.swift */,
+			);
+			path = SwifterExtension;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -280,6 +300,7 @@
 			files = (
 				6C31F63A2523855D005872DA /* LaunchScreen.storyboard in Resources */,
 				6C31F6372523855D005872DA /* Preview Assets.xcassets in Resources */,
+				6C31F66B252388F0005872DA /* WeatherCollectionCell.xib in Resources */,
 				6C31F6342523855D005872DA /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -309,6 +330,9 @@
 				6C31F6642523874F005872DA /* Navigator.swift in Sources */,
 				6C31F6662523877E005872DA /* Destination.swift in Sources */,
 				6C31F65E252386D1005872DA /* WeatherViewController.swift in Sources */,
+				6C31F66A252388F0005872DA /* WeatherCollectionCell.swift in Sources */,
+				6C31F66D25238B4E005872DA /* ActivityIndicatorFooter.swift in Sources */,
+				6C31F67225238BE8005872DA /* UICollectionView+Cell.swift in Sources */,
 				6C31F6302523855C005872DA /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
