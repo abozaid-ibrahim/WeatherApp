@@ -11,7 +11,7 @@ import Foundation
 import Foundation
 
 enum WeatherAPI {
-    case weatherToday(offset: Int)
+    case weatherToday(city:String,offset: Int)
 }
 
 extension WeatherAPI: RequestBuilder {
@@ -22,7 +22,7 @@ extension WeatherAPI: RequestBuilder {
     var path: String {
         switch self {
         case .weatherToday:
-            return "v1/public/characters"
+            return "forecast"
         }
     }
 
@@ -33,15 +33,12 @@ extension WeatherAPI: RequestBuilder {
     var method: HttpMethod {
         return .get
     }
-
+//q=München,DE&appid=ae9be71a1eac24f61d1925b0361e977a
     var parameters: [String: Any] {
-        let request = RequestAuth().api
         switch self {
-        case let .weatherToday(offset):
-            return ["apikey": APIConstants.publicKey,
-                    "ts": request.ts,
-                    "hash": request.hash,
-                    "offset": offset]
+        case  .weatherToday(let city, let offset):
+            return ["appid": APIConstants.apiKey,
+                    "q": city]
         }
     }
 

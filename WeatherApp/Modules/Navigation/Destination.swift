@@ -12,6 +12,6 @@ import UIKit
 enum Destination {
     case weather
     var controller: UIViewController {
-        return WeatherViewController()
+        return WeatherViewController(with: WeatherViewModel())
     }
 }

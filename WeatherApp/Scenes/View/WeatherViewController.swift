@@ -10,9 +10,10 @@ import UIKit
 
 private let reuseIdentifier = "WeatherCollectionCell"
 
-typealias Weather = String
 final class WeatherViewController: UICollectionViewController {
-    init() {
+    private let viewModel: WeatherViewModelType
+    init(with viewModel: WeatherViewModelType) {
+        self.viewModel = viewModel
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
     }
 
@@ -21,16 +22,23 @@ final class WeatherViewController: UICollectionViewController {
         fatalError("Unsupported")
     }
 
-    private var dataList: [Weather] { ["A", "B", "C"] }
+    private var dataList: [ForecastList] { viewModel.dataList }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         view.backgroundColor = .white
         collectionView.allowsMultipleSelection = false
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.backgroundColor = UIColor.blue
+        collectionView.backgroundColor = UIColor.lightGray
         setupCollection()
+
+        viewModel.reloadData.subscribe { [weak self] reload in
+            DispatchQueue.main.async {
+                reload ? self?.collectionView.reloadData() : ()
+            }
+        }
+        viewModel.loadData()
     }
 }
 

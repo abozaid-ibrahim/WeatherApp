@@ -7,15 +7,19 @@
 //
 
 import Foundation
-typealias WeatherResponse = String
 protocol WeatherViewModelType {
+    var reloadData: Observable<Bool> { get }
+    func loadData()
     // output
-    var dataList: [Weather] { get }
+    var dataList: [ForecastList] { get }
 }
 
 final class WeatherViewModel: WeatherViewModelType {
+    var reloadData: Observable<Bool> = .init(false)
+    
+
     private let forcastLoader: WeatherDataSource
-    private(set) var dataList: [Weather] = []
+    private(set) var dataList: [ForecastList] = []
 
     init(loader: WeatherDataSource = WeatherLoader()) {
         forcastLoader = loader
@@ -26,7 +30,8 @@ final class WeatherViewModel: WeatherViewModelType {
             guard let self = self else { return }
             switch data {
             case let .success(response):
-                print(response)
+                self.dataList = response.list ?? []
+                self.reloadData.next(true)
             case let .failure(error):
                 print(error)
             }

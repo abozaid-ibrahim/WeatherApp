@@ -32,6 +32,8 @@
 		6C31F68925238FFC005872DA /* WeatherAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C31F68825238FFC005872DA /* WeatherAPI.swift */; };
 		6C31F68B252390BD005872DA /* RemoteWeatherLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C31F68A252390BD005872DA /* RemoteWeatherLoader.swift */; };
 		6C31F68D252391FA005872DA /* Data+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C31F68C252391FA005872DA /* Data+Codable.swift */; };
+		6CFE9C512523E2BD006FE5EE /* WeatherJsonResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CFE9C502523E2BD006FE5EE /* WeatherJsonResponse.swift */; };
+		6CFE9C542523E534006FE5EE /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CFE9C532523E534006FE5EE /* Observable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,6 +85,8 @@
 		6C31F68825238FFC005872DA /* WeatherAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherAPI.swift; sourceTree = "<group>"; };
 		6C31F68A252390BD005872DA /* RemoteWeatherLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteWeatherLoader.swift; sourceTree = "<group>"; };
 		6C31F68C252391FA005872DA /* Data+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Codable.swift"; sourceTree = "<group>"; };
+		6CFE9C502523E2BD006FE5EE /* WeatherJsonResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherJsonResponse.swift; sourceTree = "<group>"; };
+		6CFE9C532523E534006FE5EE /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,6 +175,7 @@
 		6C31F65F252386D9005872DA /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				6CFE9C522523E3F8006FE5EE /* model */,
 				6C31F68325238E09005872DA /* ViewModel */,
 				6C31F68225238DF7005872DA /* View */,
 			);
@@ -213,6 +218,7 @@
 				6C31F68025238D68005872DA /* Logger.swift */,
 				6C31F67125238BE8005872DA /* UICollectionView+Cell.swift */,
 				6C31F68C252391FA005872DA /* Data+Codable.swift */,
+				6CFE9C532523E534006FE5EE /* Observable.swift */,
 			);
 			path = SwifterExtension;
 			sourceTree = "<group>";
@@ -245,10 +251,18 @@
 			children = (
 				6C31F68425238E23005872DA /* WeatherViewModel.swift */,
 				6C31F68625238EE2005872DA /* WeatherDataSource.swift */,
-				6C31F68825238FFC005872DA /* WeatherAPI.swift */,
 				6C31F68A252390BD005872DA /* RemoteWeatherLoader.swift */,
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		6CFE9C522523E3F8006FE5EE /* model */ = {
+			isa = PBXGroup;
+			children = (
+				6C31F68825238FFC005872DA /* WeatherAPI.swift */,
+				6CFE9C502523E2BD006FE5EE /* WeatherJsonResponse.swift */,
+			);
+			path = model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -392,6 +406,8 @@
 				6C31F65E252386D1005872DA /* WeatherViewController.swift in Sources */,
 				6C31F66A252388F0005872DA /* WeatherCollectionCell.swift in Sources */,
 				6C31F67B25238D41005872DA /* RequestBuilder.swift in Sources */,
+				6CFE9C512523E2BD006FE5EE /* WeatherJsonResponse.swift in Sources */,
+				6CFE9C542523E534006FE5EE /* Observable.swift in Sources */,
 				6C31F66D25238B4E005872DA /* ActivityIndicatorFooter.swift in Sources */,
 				6C31F67225238BE8005872DA /* UICollectionView+Cell.swift in Sources */,
 				6C31F68525238E23005872DA /* WeatherViewModel.swift in Sources */,
