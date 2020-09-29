@@ -8,8 +8,6 @@
 
 import Foundation
 
-import Foundation
-
 enum WeatherAPI {
     case weatherToday(city:String,offset: Int,days:Int)
 }
@@ -33,7 +31,6 @@ extension WeatherAPI: RequestBuilder {
     var method: HttpMethod {
         return .get
     }
-//q=München,DE&appid=ae9be71a1eac24f61d1925b0361e977a
     var parameters: [String: Any] {
         switch self {
         case  .weatherToday(let city, let offset,let days):

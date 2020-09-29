@@ -8,7 +8,6 @@
 
 import Foundation
 
-import Foundation
 final class LocalWeatherLoader: WeatherDataSource {
     func loadTodayForecast(days: Int, compeletion: @escaping (Result<WeatherResponse, NetworkError>) -> Void) {
         do {

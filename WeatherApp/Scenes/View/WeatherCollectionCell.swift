@@ -8,7 +8,7 @@
 
 import UIKit
 
-class WeatherCollectionCell: UICollectionViewCell {
+final class WeatherCollectionCell: UICollectionViewCell {
     @IBOutlet private var cityLabel: UILabel!
     @IBOutlet private var dateLabel: UILabel!
     @IBOutlet private var degreeLabel: UILabel!

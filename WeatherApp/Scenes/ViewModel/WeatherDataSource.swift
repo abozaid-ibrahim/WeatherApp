@@ -7,6 +7,7 @@
 //
 
 import Foundation
+
 protocol WeatherDataSource {
     func loadTodayForecast(days: Int, compeletion: @escaping (Result<WeatherResponse, NetworkError>) -> Void)
 }
@@ -14,7 +15,7 @@ protocol WeatherDataSource {
 final class WeatherLoader: WeatherDataSource {
     let localLoader: WeatherDataSource
     let remoteLoader: WeatherDataSource
-    var offlineIsRequested = true
+    var isOfflineMode = true
 
     init(localLoader: WeatherDataSource = LocalWeatherLoader(),
          remoteLoader: WeatherDataSource = RemoteWeatherLoader()) {
@@ -24,7 +25,7 @@ final class WeatherLoader: WeatherDataSource {
 
     private var shouldLoadLocally: Bool {
         let lastCallValid = true
-        return offlineIsRequested || lastCallValid || (!Reachability.shared.hasInternet())
+        return isOfflineMode || lastCallValid || (!Reachability.shared.hasInternet())
     }
 
     func loadTodayForecast(days: Int, compeletion: @escaping (Result<WeatherResponse, NetworkError>) -> Void) {

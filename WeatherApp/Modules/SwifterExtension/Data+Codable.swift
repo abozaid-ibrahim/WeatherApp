@@ -7,6 +7,7 @@
 //
 
 import Foundation
+
 extension Data {
     func parse<T: Decodable>() -> T? {
         do {

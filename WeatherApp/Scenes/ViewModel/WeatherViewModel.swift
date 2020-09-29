@@ -7,11 +7,11 @@
 //
 
 import Foundation
+
 protocol WeatherViewModelType {
-    var loadOffline: Bool { get }
     var reloadData: Observable<Bool> { get }
-    func loadData()
     var dataList: [ForecastList] { get }
+    func loadData(offline: Bool)
 }
 
 final class WeatherViewModel: WeatherViewModelType {
@@ -24,15 +24,10 @@ final class WeatherViewModel: WeatherViewModelType {
         forcastLoader = loader
     }
 
-    var loadOffline: Bool = false {
-        didSet {
-            guard let loader = forcastLoader as? WeatherLoader else { return }
-            loader.offlineIsRequested = loadOffline
-            loadData()
-        }
-    }
-
-    func loadData() {
+    func loadData(offline: Bool) {
+        // TODO: remove explicit casting
+        guard let loader = forcastLoader as? WeatherLoader else { return }
+        loader.isOfflineMode = offline
         forcastLoader.loadTodayForecast(days: days, compeletion: { [weak self] data in
             guard let self = self else { return }
             switch data {
