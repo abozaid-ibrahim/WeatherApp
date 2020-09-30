@@ -11,7 +11,9 @@ import Foundation
 extension Data {
     func parse<T: Decodable>() -> T? {
         do {
-            return try JSONDecoder().decode(T.self, from: self)
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .formatted(DateFormatter.defaultJsonFormatter)
+            return try decoder.decode(T.self, from: self)
         } catch let error {
             log(error)
         }

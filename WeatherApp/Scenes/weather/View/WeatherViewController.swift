@@ -2,33 +2,32 @@
 //  WeatherViewController.swift
 //  WeatherApp
 //
-//  Created by abuzeid on 29.09.20.
+//  Created by abuzeid on 01.10.20.
 //  Copyright © 2020 abuzeid. All rights reserved.
 //
 
 import UIKit
 
-final class WeatherViewController: UICollectionViewController {
+final class WeatherViewController: UIViewController {
     private let viewModel: WeatherViewModelType
-    private var dataList: [ForecastList] { viewModel.dataList }
     private let offlineSwitch = UISwitch()
+    @IBOutlet private var cityLabel: UILabel!
+    @IBOutlet private var collectionView: UICollectionView!
+    private var dataList: [ForecastList] { viewModel.dataList }
 
     init(with viewModel: WeatherViewModelType) {
         self.viewModel = viewModel
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        super.init(collectionViewLayout: layout)
+        super.init(nibName: "WeatherViewController", bundle:  Bundle(for:WeatherViewController.self))
     }
-
+    
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("Unsupported")
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Weather app"
-        view.backgroundColor = .white
         addOfflineSwitch()
         setupCollection()
         bindToViewModel()
@@ -44,17 +43,12 @@ final class WeatherViewController: UICollectionViewController {
 
 private extension WeatherViewController {
     func setupCollection() {
-        edgesForExtendedLayout = UIRectEdge.bottom
-
-        collectionView.allowsMultipleSelection = false
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.backgroundColor = UIColor.systemTeal.withAlphaComponent(0.5)
         collectionView.register(WeatherCollectionCell.self)
         collectionView.register(ActivityIndicatorFooterView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
                                 withReuseIdentifier: ActivityIndicatorFooterView.id)
     }
-
+    
     func bindToViewModel() {
         viewModel.reloadData.subscribe { [weak self] reload in
             DispatchQueue.main.async { if reload { self?.collectionView.reloadData() } }
@@ -70,8 +64,11 @@ private extension WeatherViewController {
             guard let self = self, let msg = error else { return }
             DispatchQueue.main.async { self.show(error: msg) }
         }
+        viewModel.city.subscribe{[weak self]value in
+            DispatchQueue.main.async { self?.cityLabel.text = value}
+        }
     }
-
+    
     func addOfflineSwitch() {
         offlineSwitch.addTarget(self, action: #selector(offlineSelectorChanged(sender:)), for: .valueChanged)
         let rightBarItem = UIBarButtonItem(customView: offlineSwitch)
@@ -81,47 +78,46 @@ private extension WeatherViewController {
 
 extension WeatherViewController: UICollectionViewDelegateFlowLayout {
     var cellSize: CGSize {
-        let fraction = CGFloat(0.8)
+        let fraction = CGFloat(0.85)
         return CGSize(width: collectionView.bounds.width * fraction, height: collectionView.bounds.height * fraction)
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return cellSize
     }
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        guard previousTraitCollection != nil else { return }
+        collectionView?.collectionViewLayout.invalidateLayout()
+    }
+
 }
 
 // MARK: - UICollectionViewDataSource
 
-extension WeatherViewController {
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+extension WeatherViewController :UICollectionViewDataSource{
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return dataList.count
     }
-
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WeatherCollectionCell.identifier, for: indexPath) as! WeatherCollectionCell
         cell.setData(model: dataList[indexPath.row])
         return cell
     }
-
-    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
         case UICollectionView.elementKindSectionFooter:
             return collectionView.dequeueReusableSupplementaryView(ofKind: kind,
                                                                    withReuseIdentifier: ActivityIndicatorFooterView.id,
                                                                    for: indexPath)
-
+            
         default:
             #if DEBUG
-                fatalError("Unexpected element kind")
+            fatalError("Unexpected element kind")
             #endif
         }
-    }
-}
-
-extension UIViewController {
-    func show(error: String) {
-        let alert = UIAlertController(title: nil, message: error, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        present(alert, animated: true, completion: nil)
     }
 }

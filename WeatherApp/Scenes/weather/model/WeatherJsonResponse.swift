@@ -10,7 +10,7 @@ import Foundation
 
 struct WeatherResponse: Codable {
     let cod: String?
-    let message, cnt: Int?
+    let message: Int?
     let list: [ForecastList]?
     let city: City?
 }
@@ -20,7 +20,8 @@ struct City: Codable {
     let name: String?
     let coord: Coord?
     let country: String?
-    let population, timezone, sunrise, sunset: Int?
+    let population, timezone: Int?
+    let sunrise, sunset: Int?
 }
 
 struct Coord: Codable {
@@ -33,13 +34,16 @@ struct ForecastList: Codable {
     let weather: [Weather]?
     let visibility: Int?
     let pop: Double?
-    let dtTxt: String?
-
+    let dtTxt: Date
     enum CodingKeys: String, CodingKey {
-        case dt, main, weather, clouds, visibility, pop
+        case dt
+        case main
+        case weather
+        case visibility
+        case pop
         case dtTxt = "dt_txt"
     }
-}
+   }
 
 struct MainClass: Codable {
     let temp, feelsLike, tempMin, tempMax: Double?
@@ -68,5 +72,18 @@ struct Weather: Codable {
         case id, main
         case weatherDescription = "description"
         case icon
+    }
+}
+extension ForecastList{
+   
+    var formattedDate:String?{
+        return  dtTxt.getFormattedDate(format: "EEEE MMM d, yyyy")
+    }
+}
+extension Date {
+   func getFormattedDate(format: String) -> String {
+        let dateformat = DateFormatter()
+        dateformat.dateFormat = format
+        return dateformat.string(from: self)
     }
 }

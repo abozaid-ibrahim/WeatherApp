@@ -18,7 +18,9 @@ extension Bundle {
             throw NetworkError.noData
         }
         do {
-            return try JSONDecoder().decode(T.self, from: data)
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .formatted(DateFormatter.defaultJsonFormatter)
+            return try decoder.decode(T.self, from: data)
         } catch {
             log(error, level: .error)
             throw NetworkError.failedToParseData
@@ -26,3 +28,10 @@ extension Bundle {
     }
 }
 
+extension DateFormatter{
+    static var defaultJsonFormatter:DateFormatter{
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        return formatter
+    }
+}
