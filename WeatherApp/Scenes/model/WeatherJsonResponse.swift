@@ -8,8 +8,6 @@
 
 import Foundation
 
-
-// MARK: - WeatherJSONResponse
 struct WeatherResponse: Codable {
     let cod: String?
     let message, cnt: Int?
@@ -17,7 +15,6 @@ struct WeatherResponse: Codable {
     let city: City?
 }
 
-// MARK: - City
 struct City: Codable {
     let id: Int?
     let name: String?
@@ -26,37 +23,24 @@ struct City: Codable {
     let population, timezone, sunrise, sunset: Int?
 }
 
-// MARK: - Coord
 struct Coord: Codable {
     let lat, lon: Double?
 }
 
-// MARK: - List
 struct ForecastList: Codable {
     let dt: Int?
     let main: MainClass?
     let weather: [Weather]?
-    let clouds: Clouds?
-    let wind: Wind?
     let visibility: Int?
     let pop: Double?
-    let sys: Sys?
     let dtTxt: String?
-    let rain: Rain?
 
     enum CodingKeys: String, CodingKey {
-        case dt, main, weather, clouds, wind, visibility, pop, sys
+        case dt, main, weather, clouds, visibility, pop
         case dtTxt = "dt_txt"
-        case rain
     }
 }
 
-// MARK: - Clouds
-struct Clouds: Codable {
-    let all: Int?
-}
-
-// MARK: - MainClass
 struct MainClass: Codable {
     let temp, feelsLike, tempMin, tempMax: Double?
     let pressure, seaLevel, grndLevel, humidity: Int?
@@ -75,22 +59,6 @@ struct MainClass: Codable {
     }
 }
 
-// MARK: - Rain
-struct Rain: Codable {
-    let the3H: Double?
-
-    enum CodingKeys: String, CodingKey {
-        case the3H = "3h"
-    }
-}
-
-// MARK: - Sys
-struct Sys: Codable {
-    let pod: String?
-}
-
-
-// MARK: - Weather
 struct Weather: Codable {
     let id: Int?
     let main: String?
@@ -101,13 +69,4 @@ struct Weather: Codable {
         case weatherDescription = "description"
         case icon
     }
-}
-
-
-
-
-// MARK: - Wind
-struct Wind: Codable {
-    let speed: Double?
-    let deg: Int?
 }
