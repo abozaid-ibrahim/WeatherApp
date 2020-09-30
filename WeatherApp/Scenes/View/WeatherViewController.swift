@@ -67,8 +67,8 @@ private extension WeatherViewController {
             }
         }
         viewModel.error.subscribe { [weak self] error in
-            guard let self = self, !error.isEmpty else { return }
-            DispatchQueue.main.async { self.show(error: error) }
+            guard let self = self, let msg = error else { return }
+            DispatchQueue.main.async { self.show(error: msg) }
         }
     }
 

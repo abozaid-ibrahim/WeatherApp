@@ -10,7 +10,7 @@ import Foundation
 
 protocol WeatherViewModelType {
     var reloadData: Observable<Bool> { get }
-    var error: Observable<String> { get }
+    var error: Observable<String?> { get }
     var isLoading: Observable<Bool> { get }
     var dataList: [ForecastList] { get }
     func loadData(offline: Bool)
@@ -18,12 +18,12 @@ protocol WeatherViewModelType {
 
 final class WeatherViewModel: WeatherViewModelType {
     private let forcastLoader: WeatherDataSource
+
     private let days: Int = 5
     let reloadData: Observable<Bool> = .init(false)
     let isLoading: Observable<Bool> = .init(false)
-    let error: Observable<String> = .init("")
+    let error: Observable<String?> = .init(nil)
     private(set) var dataList: [ForecastList] = []
-
     init(loader: WeatherDataSource = WeatherLoader(config: LoaderConfig())) {
         forcastLoader = loader
     }

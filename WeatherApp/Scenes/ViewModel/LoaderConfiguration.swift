@@ -10,26 +10,31 @@ import Foundation
 
 final class LoaderConfig {
     private let reachability: ReachabilityType
-    let intervalInSeconds = 24 * 60 * 60 / 5
+    let intervalInMinutes = 288
     var isOfflineMode = true
+
     init(_ reachability: ReachabilityType = Reachability.shared) {
         self.reachability = reachability
     }
 
-    var lastCallValid: Bool {
-        guard let updateDate = UserDefaults.standard.object(forKey: UserDefaultsKeys.apiLastUpdated.rawValue) as? Date else {
+    var isDataStillValid: Bool {
+        guard let updateDate = UserDefaults.standard.object(forKey: UserDefaultsKeys.apiLastUpdated.rawValue) as? Date,
+            let oldDate = Calendar.current.date(byAdding: .minute, value: intervalInMinutes, to: updateDate) else {
             return false
         }
-        let timeDiff = Date() - updateDate
-        return NSInteger(timeDiff) <= intervalInSeconds
+        return oldDate > Date()
     }
 
     var shouldLoadLocally: Bool {
-        return isOfflineMode || lastCallValid || (!reachability.hasInternet())
+        return isOfflineMode || isDataStillValid || (!reachability.hasInternet())
     }
 
     func setLastUpdate(to date: Date = Date()) {
         UserDefaults.standard.set(date, forKey: UserDefaultsKeys.apiLastUpdated.rawValue)
         UserDefaults.standard.synchronize()
     }
+}
+
+enum UserDefaultsKeys: String {
+    case apiLastUpdated
 }

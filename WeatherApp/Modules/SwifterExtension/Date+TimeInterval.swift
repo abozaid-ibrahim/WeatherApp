@@ -16,6 +16,15 @@ extension Date {
 
 extension TimeInterval {
     var minutes: Int {
-        return (NSInteger(self) / 60) 
+
+          let ti = NSInteger(self)
+
+
+          let seconds = ti % 60
+          let minutes = (ti / 60) % 60
+          let hours = (ti / 3600)
+
+          return hours*60*60 + minutes*60 + seconds
+        
     }
 }

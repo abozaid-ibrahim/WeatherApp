@@ -10,22 +10,21 @@ import Foundation
 
 final class RemoteWeatherLoader: WeatherDataSource {
     var config: LoaderConfig?
-    
     let apiClient: ApiClient
 
-    init(apiClient: ApiClient = HTTPClient(),config:LoaderConfig? = nil) {
+    init(apiClient: ApiClient = HTTPClient(), config: LoaderConfig? = LoaderConfig()) {
         self.apiClient = apiClient
         self.config = config
     }
 
-    func loadTodayForecast(city:String,days:Int,compeletion: @escaping (Result<WeatherResponse, NetworkError>) -> Void) {
+    func loadTodayForecast(city: String, days: Int, compeletion: @escaping (Result<WeatherResponse, NetworkError>) -> Void) {
         let api = WeatherAPI.weatherToday(city: city, days: days)
         apiClient.getData(of: api) { [weak self] result in
             switch result {
             case let .success(data):
                 if let response: WeatherResponse = data.parse() {
-                    compeletion(.success(response))
                     self?.config?.setLastUpdate()
+                    compeletion(.success(response))
                 } else {
                     compeletion(.failure(.failedToParseData))
                 }
@@ -34,9 +33,4 @@ final class RemoteWeatherLoader: WeatherDataSource {
             }
         }
     }
-  
-}
-
-enum UserDefaultsKeys: String {
-    case apiLastUpdated
 }

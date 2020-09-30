@@ -10,63 +10,58 @@
 import XCTest
 
 final class WeatherViewModelTests: XCTestCase {
+    private func getViewModel(with config: LoaderConfig) -> WeatherViewModel {
+        return WeatherViewModel(loader: WeatherLoader(localLoader: MockedLocalLoaderSuccessCase(),
+                                                      remoteLoader: MockedRemoteLoader_Failure(),
+                                                      config: config))
+    }
+
     func testWeatherLoader_HasConnection_and_DataExpired_and_isOfflineSwitchedOn() throws {
         let config = LoaderConfig(TrueReachability())
-        config.setLastUpdate(to: Date().addingTimeInterval(-Double(config.intervalInSeconds + 2)))
-        XCTAssertEqual(config.lastCallValid, false)
+        let oldDate = Calendar.current.date(byAdding: .minute, value: -300, to: Date())!
+        config.setLastUpdate(to: oldDate)
+        XCTAssertEqual(config.isDataStillValid, false)
         config.isOfflineMode = true
         XCTAssertEqual(config.shouldLoadLocally, true)
+        let viewModel = getViewModel(with: config)
+        viewModel.loadData(offline: config.isOfflineMode)
 
-        let viewModel = WeatherViewModel(loader: WeatherLoader(localLoader: MockedLocalLoaderSuccessCase(),
-                                                               remoteLoader: MockedRemoteLoader_Failure(),
-                                                               config: config))
-        let queue = DispatchQueue(label: "FileLoaderTests")
-        queue.sync {
-            viewModel.loadData(offline: config.isOfflineMode)
-        }
         XCTAssertEqual(viewModel.dataList.count, 5)
     }
 
     func testWeatherLoader_DataExpired_and_isOfflineSwitchedOff_and_HasNoConnection() throws {
         let config = LoaderConfig(FalseReachability())
         config.isOfflineMode = false
-        config.setLastUpdate(to: Date().addingTimeInterval(-Double(config.intervalInSeconds + 2)))
-        XCTAssertEqual(config.lastCallValid, false)
+        let oldDate = Calendar.current.date(byAdding: .minute, value: -300, to: Date())!
+        config.setLastUpdate(to: oldDate)
+        XCTAssertEqual(config.isDataStillValid, false)
         XCTAssertEqual(config.shouldLoadLocally, true)
 
-        let viewModel = WeatherViewModel(loader: WeatherLoader(localLoader: MockedLocalLoaderSuccessCase(),
-                                                               remoteLoader: MockedRemoteLoader_Failure(),
-                                                               config: config))
+        let viewModel = getViewModel(with: config)
+        viewModel.loadData(offline: config.isOfflineMode)
 
-        let queue = DispatchQueue(label: "FileLoaderTests")
-        queue.sync {
-            viewModel.loadData(offline: config.isOfflineMode)
-        }
         XCTAssertEqual(viewModel.dataList.count, 5)
     }
 
     func testWeatherLoader_HasConnection_and_ValidInterval_and_isOfflineSwitchedOn() throws {
         let config = LoaderConfig(TrueReachability())
         config.isOfflineMode = false
-        config.setLastUpdate(to: Date().addingTimeInterval(-Double(config.intervalInSeconds - 1)))
-        XCTAssertEqual(config.lastCallValid, true)
+        let oldDate = Calendar.current.date(byAdding: .minute, value: -270, to: Date())!
+        config.setLastUpdate(to: oldDate)
+        XCTAssertEqual(config.isDataStillValid, true)
         XCTAssertEqual(config.shouldLoadLocally, true)
-        let viewModel = WeatherViewModel(loader: WeatherLoader(localLoader: MockedLocalLoaderSuccessCase(),
-                                                               remoteLoader: MockedRemoteLoader_Failure(),
-                                                               config: config))
+        let viewModel = getViewModel(with: config)
 
-        let queue = DispatchQueue(label: "FileLoaderTests")
-        queue.sync {
-            viewModel.loadData(offline: config.isOfflineMode)
-        }
+        viewModel.loadData(offline: config.isOfflineMode)
         XCTAssertEqual(viewModel.dataList.count, 5)
     }
 
     func testWeatherLoaderShouldLoadRemotelyOn_ExpiredInterval() throws {
         let config = LoaderConfig(TrueReachability())
         config.isOfflineMode = false
-        config.setLastUpdate(to: Date().addingTimeInterval(-Double(config.intervalInSeconds + 2)))
-        XCTAssertEqual(config.lastCallValid, false)
+        let oldDate = Calendar.current.date(byAdding: .minute, value: -(config.intervalInMinutes + 1), to: Date())!
+        config.setLastUpdate(to: oldDate)
+        XCTAssertEqual(config.isDataStillValid, false)
         XCTAssertEqual(config.shouldLoadLocally, false)
         let loader = WeatherLoader(localLoader: MockedLocalLoaderSuccessCase(),
                                    remoteLoader: MockedRemoteLoader_Failure(),
@@ -78,14 +73,9 @@ final class WeatherViewModelTests: XCTestCase {
             }
             exp.fulfill()
         })
-        let viewModel = WeatherViewModel(loader: WeatherLoader(localLoader: MockedLocalLoaderSuccessCase(),
-                                                               remoteLoader: MockedRemoteLoader_Failure(),
-                                                               config: config))
+        let viewModel = getViewModel(with: config)
 
-        let queue = DispatchQueue(label: "FileLoaderTests")
-        queue.sync {
-            viewModel.loadData(offline: config.isOfflineMode)
-        }
+        viewModel.loadData(offline: config.isOfflineMode)
         XCTAssertEqual(viewModel.dataList.count, 0)
         wait(for: [exp], timeout: 0.01)
     }

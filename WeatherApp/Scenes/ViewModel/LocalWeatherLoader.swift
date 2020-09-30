@@ -13,7 +13,7 @@ final class LocalWeatherLoader: WeatherDataSource {
     
     func loadTodayForecast(city:String,days: Int, compeletion: @escaping (Result<WeatherResponse, NetworkError>) -> Void) {
         do {
-            let response = try Bundle.main.decode(WeatherResponse.self, from: "forecast")
+            let response = try Bundle.main.decode(WeatherResponse.self, from: "forecast.json")
             compeletion(.success(response))
         } catch {
             compeletion(.failure(.noData))
