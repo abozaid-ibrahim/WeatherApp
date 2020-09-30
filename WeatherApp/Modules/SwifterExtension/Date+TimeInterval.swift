@@ -15,7 +15,7 @@ extension Date {
 }
 
 extension TimeInterval {
-    var hours: Int {
-        return (NSInteger(self) / 3600)
+    var minutes: Int {
+        return (NSInteger(self) / 60) 
     }
 }

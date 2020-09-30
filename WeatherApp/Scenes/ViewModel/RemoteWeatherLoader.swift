@@ -13,8 +13,9 @@ final class RemoteWeatherLoader: WeatherDataSource {
     
     let apiClient: ApiClient
 
-    init(apiClient: ApiClient = HTTPClient()) {
+    init(apiClient: ApiClient = HTTPClient(),config:LoaderConfig? = nil) {
         self.apiClient = apiClient
+        self.config = config
     }
 
     func loadTodayForecast(city:String,days:Int,compeletion: @escaping (Result<WeatherResponse, NetworkError>) -> Void) {
@@ -24,7 +25,7 @@ final class RemoteWeatherLoader: WeatherDataSource {
             case let .success(data):
                 if let response: WeatherResponse = data.parse() {
                     compeletion(.success(response))
-                    self?.cachData(response)
+                    self?.config?.setLastUpdate()
                 } else {
                     compeletion(.failure(.failedToParseData))
                 }
@@ -33,13 +34,7 @@ final class RemoteWeatherLoader: WeatherDataSource {
             }
         }
     }
-    private func cachData(_ data: WeatherResponse) {
-           DispatchQueue.global().async {
-               UserDefaults.standard.set(Date(), forKey: UserDefaultsKeys.apiLastUpdated.rawValue)
-               UserDefaults.standard.synchronize()
-//               CoreDataHelper.shared.save(data: data, entity: .heroes)
-           }
-       }
+  
 }
 
 enum UserDefaultsKeys: String {

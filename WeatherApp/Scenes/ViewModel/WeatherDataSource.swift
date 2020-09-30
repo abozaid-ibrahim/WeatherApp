@@ -20,30 +20,14 @@ final class WeatherLoader: WeatherDataSource {
 
     init(localLoader: WeatherDataSource = LocalWeatherLoader(),
          remoteLoader: WeatherDataSource = RemoteWeatherLoader(),
-         config: LoaderConfig) {
+         config: LoaderConfig = LoaderConfig()) {
         self.localLoader = localLoader
         self.remoteLoader = remoteLoader
         self.config = config
     }
 
-    private var shouldLoadLocally: Bool {
-        return config?.isOfflineMode ?? false || lastCallValid || (!Reachability.shared.hasInternet())
-    }
-
-    var lastCallValid: Bool {
-        guard let updateDate = UserDefaults.standard.object(forKey: UserDefaultsKeys.apiLastUpdated.rawValue) as? Date else {
-            return false
-        }
-        let timeDiff = Date() - updateDate
-        return timeDiff.hours < 3
-    }
-
     func loadTodayForecast(city: String, days: Int, compeletion: @escaping (Result<WeatherResponse, NetworkError>) -> Void) {
-        let loader = shouldLoadLocally ? remoteLoader : localLoader
+        let loader = (config?.shouldLoadLocally ?? false) ? localLoader : remoteLoader
         loader.loadTodayForecast(city: city, days: days, compeletion: compeletion)
     }
-}
-
-final class LoaderConfig {
-    var isOfflineMode = true
 }
