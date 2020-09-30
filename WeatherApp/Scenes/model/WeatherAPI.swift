@@ -9,7 +9,7 @@
 import Foundation
 
 enum WeatherAPI {
-    case weatherToday(city:String,offset: Int,days:Int)
+    case weatherToday(city: String, days: Int)
 }
 
 extension WeatherAPI: RequestBuilder {
@@ -31,12 +31,13 @@ extension WeatherAPI: RequestBuilder {
     var method: HttpMethod {
         return .get
     }
+
     var parameters: [String: Any] {
         switch self {
-        case  .weatherToday(let city, let offset,let days):
+        case let .weatherToday(city, days):
             return ["appid": APIConstants.apiKey,
                     "q": city,
-                    "cnt":days]
+                    "cnt": days]
         }
     }
 

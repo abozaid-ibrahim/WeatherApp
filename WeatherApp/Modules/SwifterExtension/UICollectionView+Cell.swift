@@ -25,9 +25,9 @@ extension UICollectionView {
         register(nib, forCellWithReuseIdentifier: T.identifier)
     }
 
-    func updateFooterHeight(height: CGFloat = 50) {
+    func updateFooter(size: CGSize) {
         guard let layout = collectionViewLayout as? UICollectionViewFlowLayout else { return }
-        layout.footerReferenceSize = CGSize(width: layout.footerReferenceSize.width, height: height)
-        setCollectionViewLayout(layout, animated: false)
+        layout.footerReferenceSize = size
+        setCollectionViewLayout(layout, animated: true)
     }
 }

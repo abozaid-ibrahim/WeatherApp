@@ -9,27 +9,41 @@
 import Foundation
 
 protocol WeatherDataSource {
-    func loadTodayForecast(days: Int, compeletion: @escaping (Result<WeatherResponse, NetworkError>) -> Void)
+    var config: LoaderConfig? { get }
+    func loadTodayForecast(city: String, days: Int, compeletion: @escaping (Result<WeatherResponse, NetworkError>) -> Void)
 }
 
 final class WeatherLoader: WeatherDataSource {
     let localLoader: WeatherDataSource
     let remoteLoader: WeatherDataSource
-    var isOfflineMode = true
+    let config: LoaderConfig?
 
     init(localLoader: WeatherDataSource = LocalWeatherLoader(),
-         remoteLoader: WeatherDataSource = RemoteWeatherLoader()) {
+         remoteLoader: WeatherDataSource = RemoteWeatherLoader(),
+         config: LoaderConfig) {
         self.localLoader = localLoader
         self.remoteLoader = remoteLoader
+        self.config = config
     }
 
     private var shouldLoadLocally: Bool {
-        let lastCallValid = true
-        return isOfflineMode || lastCallValid || (!Reachability.shared.hasInternet())
+        return config?.isOfflineMode ?? false || lastCallValid || (!Reachability.shared.hasInternet())
     }
 
-    func loadTodayForecast(days: Int, compeletion: @escaping (Result<WeatherResponse, NetworkError>) -> Void) {
-        let loader = shouldLoadLocally ? remoteLoader : localLoader
-        loader.loadTodayForecast(days: days, compeletion: compeletion)
+    var lastCallValid: Bool {
+        guard let updateDate = UserDefaults.standard.object(forKey: UserDefaultsKeys.apiLastUpdated.rawValue) as? Date else {
+            return false
+        }
+        let timeDiff = Date() - updateDate
+        return timeDiff.hours < 3
     }
+
+    func loadTodayForecast(city: String, days: Int, compeletion: @escaping (Result<WeatherResponse, NetworkError>) -> Void) {
+        let loader = shouldLoadLocally ? remoteLoader : localLoader
+        loader.loadTodayForecast(city: city, days: days, compeletion: compeletion)
+    }
+}
+
+final class LoaderConfig {
+    var isOfflineMode = true
 }

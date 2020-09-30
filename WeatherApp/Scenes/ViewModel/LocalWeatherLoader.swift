@@ -9,7 +9,9 @@
 import Foundation
 
 final class LocalWeatherLoader: WeatherDataSource {
-    func loadTodayForecast(days: Int, compeletion: @escaping (Result<WeatherResponse, NetworkError>) -> Void) {
+    var config: LoaderConfig?
+    
+    func loadTodayForecast(city:String,days: Int, compeletion: @escaping (Result<WeatherResponse, NetworkError>) -> Void) {
         do {
             let response = try Bundle.main.decode(WeatherResponse.self, from: "forecast")
             compeletion(.success(response))

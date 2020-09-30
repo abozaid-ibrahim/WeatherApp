@@ -9,19 +9,22 @@
 import Foundation
 
 final class RemoteWeatherLoader: WeatherDataSource {
+    var config: LoaderConfig?
+    
     let apiClient: ApiClient
 
     init(apiClient: ApiClient = HTTPClient()) {
         self.apiClient = apiClient
     }
 
-    func loadTodayForecast(days:Int,compeletion: @escaping (Result<WeatherResponse, NetworkError>) -> Void) {
-        let api = WeatherAPI.weatherToday(city: "München", offset: 0, days: days)
+    func loadTodayForecast(city:String,days:Int,compeletion: @escaping (Result<WeatherResponse, NetworkError>) -> Void) {
+        let api = WeatherAPI.weatherToday(city: city, days: days)
         apiClient.getData(of: api) { [weak self] result in
             switch result {
             case let .success(data):
                 if let response: WeatherResponse = data.parse() {
                     compeletion(.success(response))
+                    self?.cachData(response)
                 } else {
                     compeletion(.failure(.failedToParseData))
                 }
@@ -30,4 +33,15 @@ final class RemoteWeatherLoader: WeatherDataSource {
             }
         }
     }
+    private func cachData(_ data: WeatherResponse) {
+           DispatchQueue.global().async {
+               UserDefaults.standard.set(Date(), forKey: UserDefaultsKeys.apiLastUpdated.rawValue)
+               UserDefaults.standard.synchronize()
+//               CoreDataHelper.shared.save(data: data, entity: .heroes)
+           }
+       }
+}
+
+enum UserDefaultsKeys: String {
+    case apiLastUpdated
 }

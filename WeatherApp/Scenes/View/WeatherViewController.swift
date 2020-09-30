@@ -15,7 +15,9 @@ final class WeatherViewController: UICollectionViewController {
 
     init(with viewModel: WeatherViewModelType) {
         self.viewModel = viewModel
-        super.init(collectionViewLayout: UICollectionViewFlowLayout())
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        super.init(collectionViewLayout: layout)
     }
 
     @available(*, unavailable)
@@ -42,23 +44,31 @@ final class WeatherViewController: UICollectionViewController {
 
 private extension WeatherViewController {
     func setupCollection() {
+        edgesForExtendedLayout = UIRectEdge.bottom
+
         collectionView.allowsMultipleSelection = false
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
+        collectionView.backgroundColor = UIColor.systemTeal.withAlphaComponent(0.5)
         collectionView.register(WeatherCollectionCell.self)
         collectionView.register(ActivityIndicatorFooterView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
                                 withReuseIdentifier: ActivityIndicatorFooterView.id)
-        if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.scrollDirection = .horizontal
-        }
     }
 
     func bindToViewModel() {
         viewModel.reloadData.subscribe { [weak self] reload in
+            DispatchQueue.main.async { if reload { self?.collectionView.reloadData() } }
+        }
+        viewModel.isLoading.subscribe { [weak self] isLoading in
+            guard let self = self else { return }
             DispatchQueue.main.async {
-                reload ? self?.collectionView.reloadData() : ()
+                let size: CGSize = isLoading ? self.collectionView.bounds.size : .zero
+                self.collectionView.updateFooter(size: size)
             }
+        }
+        viewModel.error.subscribe { [weak self] error in
+            guard let self = self, !error.isEmpty else { return }
+            DispatchQueue.main.async { self.show(error: error) }
         }
     }
 
@@ -70,10 +80,13 @@ private extension WeatherViewController {
 }
 
 extension WeatherViewController: UICollectionViewDelegateFlowLayout {
+    var cellSize: CGSize {
+        let fraction = CGFloat(0.8)
+        return CGSize(width: collectionView.bounds.width * fraction, height: collectionView.bounds.height * fraction)
+    }
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = collectionView.bounds.width
-        let padding = CGFloat(8)
-        return CGSize(width: width - padding, height: collectionView.bounds.height - padding)
+        return cellSize
     }
 }
 
@@ -102,5 +115,13 @@ extension WeatherViewController {
                 fatalError("Unexpected element kind")
             #endif
         }
+    }
+}
+
+extension UIViewController {
+    func show(error: String) {
+        let alert = UIAlertController(title: nil, message: error, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
 }
