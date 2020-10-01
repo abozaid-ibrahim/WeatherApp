@@ -8,7 +8,7 @@
 
 import Foundation
 
- class RemoteWeatherLoader: WeatherDataSource {
+class RemoteWeatherLoader: WeatherDataSource {
     var config: LoaderConfig?
     let apiClient: ApiClient
 

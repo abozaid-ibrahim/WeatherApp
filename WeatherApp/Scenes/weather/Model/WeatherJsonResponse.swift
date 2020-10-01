@@ -43,7 +43,7 @@ struct ForecastList: Codable {
         case pop
         case dtTxt = "dt_txt"
     }
-   }
+}
 
 struct MainClass: Codable {
     let temp, feelsLike, tempMin, tempMax: Double?
@@ -74,13 +74,15 @@ struct Weather: Codable {
         case icon
     }
 }
-extension ForecastList{
-    var formattedDate:String?{
-        return  dtTxt.getFormattedDate(format: "EEEE MMM d, yyyy")
+
+extension ForecastList {
+    var formattedDate: String? {
+        return dtTxt.getFormattedDate(format: "EEEE MMM d, yyyy")
     }
 }
+
 extension Date {
-   func getFormattedDate(format: String) -> String {
+    func getFormattedDate(format: String) -> String {
         let dateformat = DateFormatter()
         dateformat.dateFormat = format
         return dateformat.string(from: self)

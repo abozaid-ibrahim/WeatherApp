@@ -10,8 +10,6 @@
 import XCTest
 
 final class LocalLoaderTests: XCTestCase {
-    
-
     private func getViewModel(with config: LoaderConfig) -> WeatherViewModel {
         return WeatherViewModel(loader: WeatherLoader(localLoader: MockedLocalLoaderSuccessCase(),
                                                       remoteLoader: MockedRemoteLoader_Failure(),
@@ -21,7 +19,7 @@ final class LocalLoaderTests: XCTestCase {
     func testWeatherLoader_HasConnection_and_DataExpired_and_isOfflineSwitchedOn() throws {
         let config = LoaderConfig(TrueReachability())
         config.setLastUpdate(to: APIInterval().expired)
-        
+
         XCTAssertEqual(config.isDataStillValid, false)
         config.isOfflineMode = true
         XCTAssertEqual(config.shouldLoadLocally, true)
@@ -55,5 +53,4 @@ final class LocalLoaderTests: XCTestCase {
         viewModel.loadData(offline: config.isOfflineMode)
         XCTAssertEqual(viewModel.dataList.count, 5)
     }
-
 }
