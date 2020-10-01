@@ -10,7 +10,7 @@ import Foundation
 
 final class LoaderConfig {
     private let reachability: ReachabilityType
-    let intervalInMinutes = 288
+    static let intervalInMinutes = 288
     var isOfflineMode = true
 
     init(_ reachability: ReachabilityType = Reachability.shared) {
@@ -19,7 +19,7 @@ final class LoaderConfig {
 
     var isDataStillValid: Bool {
         guard let updateDate = UserDefaults.standard.object(forKey: UserDefaultsKeys.apiLastUpdated.rawValue) as? Date,
-            let oldDate = Calendar.current.date(byAdding: .minute, value: intervalInMinutes, to: updateDate) else {
+            let oldDate = Calendar.current.date(byAdding: .minute, value: LoaderConfig.intervalInMinutes, to: updateDate) else {
             return false
         }
         return oldDate > Date()

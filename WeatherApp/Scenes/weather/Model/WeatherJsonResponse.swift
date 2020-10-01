@@ -16,7 +16,7 @@ struct WeatherResponse: Codable {
 }
 
 struct City: Codable {
-    let id: Int?
+    let id: Int
     let name: String?
     let coord: Coord?
     let country: String?
@@ -64,7 +64,7 @@ struct MainClass: Codable {
 }
 
 struct Weather: Codable {
-    let id: Int?
+    let id: Int
     let main: String?
     let weatherDescription, icon: String?
 
@@ -75,7 +75,6 @@ struct Weather: Codable {
     }
 }
 extension ForecastList{
-   
     var formattedDate:String?{
         return  dtTxt.getFormattedDate(format: "EEEE MMM d, yyyy")
     }

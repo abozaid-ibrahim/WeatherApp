@@ -15,7 +15,7 @@ If this is your first time encountering swift/ios development, please follow [th
 ```
 // App Settings
 APP_NAME = WeatherApp
-PRODUCT_BUNDLE_IDENTIFIER = com.abuzeid.WeatherApp
+PRODUCT_BUNDLE_IDENTIFIER = abozaid.WeatherApp
 
 #targets:
 * WeatherApp
