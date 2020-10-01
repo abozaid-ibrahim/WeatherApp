@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Bundle {
+public extension Bundle {
     func decode<T: Decodable>(_: T.Type, from file: String) throws -> T {
         guard let url = self.url(forResource: file, withExtension: nil) else {
             throw NetworkError.badRequest

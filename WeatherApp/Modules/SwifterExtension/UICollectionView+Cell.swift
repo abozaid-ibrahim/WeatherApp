@@ -8,13 +8,13 @@
 
 import UIKit
 
-extension UICollectionViewCell {
+public extension UICollectionViewCell {
     static var identifier: String {
         return String(describing: self)
     }
 }
 
-extension UICollectionView {
+public extension UICollectionView {
     /// WARNING: you must set the reuse identifier as same as the nib file name.
     func register<T: UICollectionViewCell>(_: T.Type) {
         let nib = UINib(nibName: T.identifier, bundle: Bundle(for: T.self))

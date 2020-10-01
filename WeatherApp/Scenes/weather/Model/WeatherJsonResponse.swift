@@ -69,7 +69,8 @@ struct Weather: Codable {
     let weatherDescription, icon: String?
 
     enum CodingKeys: String, CodingKey {
-        case id, main
+        case id
+        case main
         case weatherDescription = "description"
         case icon
     }
@@ -81,10 +82,3 @@ extension ForecastList {
     }
 }
 
-extension Date {
-    func getFormattedDate(format: String) -> String {
-        let dateformat = DateFormatter()
-        dateformat.dateFormat = format
-        return dateformat.string(from: self)
-    }
-}

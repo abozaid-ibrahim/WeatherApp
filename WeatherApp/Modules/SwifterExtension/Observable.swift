@@ -10,7 +10,7 @@ import Foundation
 
 /// An Observable will give  any  subscriber  the most  recent element
 /// and  everything that  is  emitted  by that  sequence after the  subscription  happened.
-final class Observable<T> {
+final public class Observable<T> {
     private var observers = [UUID: (T) -> Void]()
     private var _value: T {
         didSet {

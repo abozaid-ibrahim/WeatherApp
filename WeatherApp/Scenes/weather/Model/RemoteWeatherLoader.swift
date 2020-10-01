@@ -9,7 +9,7 @@
 import Foundation
 
 class RemoteWeatherLoader: WeatherDataSource {
-    var config: LoaderConfig?
+    private(set) var config: LoaderConfig?
     let apiClient: ApiClient
 
     init(apiClient: ApiClient = HTTPClient(), config: LoaderConfig? = LoaderConfig()) {

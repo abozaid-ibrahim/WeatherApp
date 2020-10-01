@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Data {
+public extension Data {
     func parse<T: Decodable>() -> T? {
         do {
             let decoder = JSONDecoder()
@@ -21,10 +21,18 @@ extension Data {
     }
 }
 
-extension DateFormatter{
-    static var defaultJsonFormatter:DateFormatter{
+extension DateFormatter {
+    static var defaultJsonFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         return formatter
+    }
+}
+
+extension Date {
+    func getFormattedDate(format: String) -> String {
+        let dateformat = DateFormatter()
+        dateformat.dateFormat = format
+        return dateformat.string(from: self)
     }
 }
