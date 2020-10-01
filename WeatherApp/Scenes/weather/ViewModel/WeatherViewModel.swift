@@ -29,25 +29,26 @@ final class WeatherViewModel: WeatherViewModelType {
     init(loader: WeatherDataSource = WeatherLoader(config: LoaderConfig())) {
         forcastLoader = loader
     }
-    
+
     func loadData(offline: Bool) {
+        guard let cityName = city.value else { return }
         reset()
         isLoading.next(true)
         forcastLoader.config?.isOfflineMode = offline
-        forcastLoader.loadTodayForecast(city: city.value ?? "", days: days, compeletion: { [weak self] data in
+        forcastLoader.loadTodayForecast(city: cityName, days: days, compeletion: { [weak self] data in
             guard let self = self else { return }
             switch data {
             case let .success(response):
-                self.dataList =  response.list ?? []
+                self.dataList = response.list ?? []
                 self.reloadData.next(true)
             case let .failure(error):
                 self.error.next(error.localizedDescription)
             }
             self.isLoading.next(false)
-            
+
         })
     }
-    
+
     private func reset() {
         dataList.removeAll()
         reloadData.next(true)

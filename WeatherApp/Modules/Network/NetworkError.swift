@@ -6,10 +6,10 @@
 //  Copyright © 2020 abuzeid. All rights reserved.
 //
 import Foundation
+
 enum NetworkError: LocalizedError {
     case badRequest
     case noData
-    case generalFailure
     case failedToParseData
     case dataIsNil
     case connectionFailed

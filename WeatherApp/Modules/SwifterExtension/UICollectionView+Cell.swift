@@ -15,10 +15,6 @@ extension UICollectionViewCell {
 }
 
 extension UICollectionView {
-    enum CollSize {
-        case with(width: CGFloat, height: CGFloat)
-    }
-
     /// WARNING: you must set the reuse identifier as same as the nib file name.
     func register<T: UICollectionViewCell>(_: T.Type) {
         let nib = UINib(nibName: T.identifier, bundle: Bundle(for: T.self))

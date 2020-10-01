@@ -8,6 +8,7 @@
 
 import Foundation
 import Network
+
 protocol ReachabilityType {
     func hasInternet() -> Bool
 }
@@ -20,7 +21,6 @@ final class Reachability: ReachabilityType {
     private var hasConnectionPath = false
 
     func startInternetTracking() {
-        // only fires once
         guard internetMonitor.pathUpdateHandler == nil else {
             return
         }
